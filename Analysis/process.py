@@ -5,7 +5,7 @@ the timestamps, some don't. In case, a transcript doesn't have the timestamp, it
 manually there in order to use the following procedure
 '''
 
-from TensionAnalysis.packages import *
+from Analysis.packages import *
 
 class Process:
     def __init__(self, corpus):

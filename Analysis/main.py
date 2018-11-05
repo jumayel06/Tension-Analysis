@@ -1,6 +1,6 @@
-from TensionAnalysis.process import *
-from TensionAnalysis.EmotionHelpers import *
-from TensionAnalysis.HedgeDetection import *
+from Analysis.process import *
+from Analysis.EmotionHelpers import *
+from Analysis.HedgeDetection import *
 
 # Initializations
 hedges = []

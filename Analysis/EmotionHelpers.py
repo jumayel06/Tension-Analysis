@@ -1,4 +1,4 @@
-from TensionAnalysis.packages import *
+from Analysis.packages import *
 
 feature_dimension = 29
 

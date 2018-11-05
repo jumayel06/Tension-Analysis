@@ -117,5 +117,5 @@ dmypy.json
 stanford-corenlp-full-2018-02-27/
 __pycache__/
 .idea/
-TensionAnalysis/models/*
-TensionAnalysis/resources/stanford-corenlp-full-2018-02-27
+Analysis/models/*
+Analysis/resources/stanford-corenlp-full-2018-02-27
