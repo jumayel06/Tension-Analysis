@@ -101,7 +101,7 @@ def IsBoosting(s):
                 previous_word = list_of_words[list_of_words.index(word) - 1]
             else:
                 previous_word = ""
-            if previous_word in ['not']:
+            if previous_word in ['not', "without"]:
                 return False
             else:
                 return True

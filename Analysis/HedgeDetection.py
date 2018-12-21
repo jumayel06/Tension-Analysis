@@ -389,7 +389,7 @@ def IsHedgedSentence(text):
     phrases = []
     status = False
 
-    # Determine the n-grams of the given sentnece
+    # Determine the n-grams of the given sentence
     for i in range(1,6):
         phrases += ngrams(tokenized, i)
 
