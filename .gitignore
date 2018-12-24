@@ -114,8 +114,8 @@ dmypy.json
 .pyre/
 *.DS_Store
 
-stanford-corenlp-full-2018-02-27/
 __pycache__/
 .idea/
-Analysis/models/*
-Analysis/resources/stanford-corenlp-full-2018-02-27
+models/*
+resources/stanford-corenlp-full-2018-02-27
+stanford-corenlp-full-2018-02-27

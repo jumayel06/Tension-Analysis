@@ -1,16 +1,17 @@
-from Analysis.packages import *
+from packages import *
 
 # ********* Initializations ********* #
 lmtzr = WordNetLemmatizer()
 hedge_words = []
 discourse_markers = []
+THRESHOLD = 0.8
 
 # ********* Python Wrapper for Stanford CoreNLP ********* #
 # ********* Class definition implemented from "https://github.com/Lynten/stanford-corenlp" with slight modifications ********* #
 
 class StanfordCoreNLP:
-    def __init__(self, path_or_host, port=None, memory='4g', lang='en', timeout=1500, quiet=True,
-                 logging_level=logging.WARNING, max_retries=5):
+    def __init__(self, path_or_host, port=None, memory='4g', lang='en', timeout=5000, quiet=True,
+                 logging_level=logging.WARNING, max_retries=100):
         self.path_or_host = path_or_host
         self.port = port
         self.memory = memory
@@ -393,22 +394,23 @@ def IsHedgedSentence(text):
     for i in range(1,6):
         phrases += ngrams(tokenized, i)
 
-    # Determine whether disocurse markers are present in the n-grams
-    # Use Jaccard distance for measuring similarity
-    for A in discourse_markers:
-        for B in phrases:
-            if (1 - jaccard_distance(set(A.split()), set(list(B)))) >= 0.8:
-                status = True
-                break
-
-        if status:
+    # Determine whether hedge terms are present in the sentence and find out if they are true hedge terms
+    for hedge in hedge_words:
+        if hedge in tokenized and IsTrueHedgeTerm(hedge, text):
+            status = True
             break
 
-    # Determine whether hedge terms are present in the sentence and find out if they are true hedge terms
+
+    # Determine whether disocurse markers are present in the n-grams
+    # Use Jaccard distance for measuring similarity
     if not status:
-        for hedge in hedge_words:
-            if hedge in tokenized and IsTrueHedgeTerm(hedge, text):
-                status = True
+        for A in discourse_markers:
+            for B in phrases:
+                if (1 - jaccard_distance(set(A.split()), set(list(B)))) >= THRESHOLD:
+                    status = True
+                    break
+
+            if status:
                 break
 
     return status

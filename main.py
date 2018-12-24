@@ -1,6 +1,6 @@
-from Analysis.process import *
-from Analysis.EmotionHelpers import *
-from Analysis.HedgeDetection import *
+from process import *
+from EmotionHelpers import *
+from HedgeDetection import *
 
 # Initializations
 hedges = []
@@ -13,8 +13,8 @@ QUES_TYPES = ["what", "when", "where", "who", "why", "how", "yesno", "mixed"]
 
 # Pre-trained model for emotion recognition
 # emotions = ['anger', 'emotion-not-listed', 'fear', 'happiness', 'NE', 'sadness']
-model = load_model('models/model.h5')
-with open('models/variables.p', 'rb') as f:
+model = load_model(sys.argv[1])
+with open(sys.argv[2], 'rb') as f:
     lb, tokenizer_tweets, max_tweet_length, tokenizer_hash_emo, max_hash_emo_length, embeddings_index = pickle.load(f)
 
 
@@ -106,76 +106,83 @@ def IsBoosting(s):
             else:
                 return True
 
-def tension_analysis(corpora):
-    with open('tension.csv', mode='w') as f:
+# Generates a csv file containing identified tension points for the provided interview file
+# Input: List of question-answer pairs (Ex: [(q1,a1),(q2,a2),...])
+def tension_analysis(ques_ans):
+    with open(sys.argv[4], mode='w') as f:
         writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow(['File', 'Content', 'Role', 'Predicted Label'])
+        writer.writerow(['Content', 'Role', 'Predicted Label'])
 
-        for k in range(len(corpora)):
-            processor = Process(corpora[k])
-            processor.process_html()
-            ques_ans = processor.extract_ques_ans()
-            stats = ques_statistics(ques_ans)
+        stats = ques_statistics(ques_ans)
+        for pair in ques_ans:
+            ques = pair[0].lower()
+            ans = pair[1].lower()
+            sentences = sent_tokenize(ans)
+            writer.writerow([pair[0], 'Interviewer', "-"])
+            isNegativeEmotion = False
+            isHedging = False
+            isQuestion = False
+            isOutlier = False
+            isBoosting = False
+            cuePresent = False
 
-            for pair in ques_ans:
-                ques = pair[0].lower()
-                ans = pair[1].lower()
-                sentences = sent_tokenize(ans)
-                writer.writerow([corpora[k].split('/',2)[2], pair[0], 'Interviewer', "-"])
-                isNegativeEmotion = False
-                isHedging = False
-                isQuestion = False
-                isOutlier = False
-                isBoosting = False
-                cuePresent = False
+            for s in sentences[:5]:
+                if get_emotion(s) == "negative":
+                    isNegativeEmotion = True
 
-                for s in sentences[:5]:
-                    if get_emotion(s) == "negative":
-                        isNegativeEmotion = True
+                if IsHedgedSentence(s):
+                    isHedging = True
 
-                    if IsHedgedSentence(s):
-                        isHedging = True
+                if IsBoosting(s):
+                    isBoosting = True
 
-                    if IsBoosting(s):
-                        isBoosting = True
+            for cue in cues:
+                if cue in ans:
+                    cuePresent = True
 
-                for cue in cues:
-                    if cue in ans:
-                        cuePresent = True
+            for qt in ["what", "when", "where", "who", "why", "how"]:
+                if len(sentences) > 0 and qt in sentences[0] and "?" in sentences[0]:
+                    isQuestion = True
 
-                for qt in ["what", "when", "where", "who", "why", "how"]:
-                    if len(sentences) > 0 and qt in sentences[0] and "?" in sentences[0]:
-                        isQuestion = True
+            number_of_words = len(word_tokenize(ans))
+            counter = 0
+            found_type = ""
 
-                number_of_words = len(word_tokenize(ans))
-                counter = 0
-                found_type = ""
+            for type in QUES_TYPES:
+                if type in ques:
+                    counter += 1
+                    found_type = type
 
-                for type in QUES_TYPES:
-                    if type in ques:
-                        counter += 1
-                        found_type = type
+            if counter == 0:
+                mean = stats["yesno"]["mean"]
+                std = stats["yesno"]["std"]
+            elif counter == 1:
+                mean = stats[found_type]["mean"]
+                std = stats[found_type]["std"]
+            else:
+                mean = stats["mixed"]["mean"]
+                std = stats["mixed"]["std"]
 
-                if counter == 0:
-                    mean = stats["yesno"]["mean"]
-                    std = stats["yesno"]["std"]
-                elif counter == 1:
-                    mean = stats[found_type]["mean"]
-                    std = stats[found_type]["std"]
-                else:
-                    mean = stats["mixed"]["mean"]
-                    std = stats["mixed"]["std"]
+            if number_of_words > mean + 3 * std or number_of_words < mean - 3 * std:
+                isOutlier = True
 
-                if number_of_words > mean + 3 * std or number_of_words < mean - 3 * std:
-                    isOutlier = True
+            if (isNegativeEmotion and isHedging) or (isBoosting and isHedging) or (cuePresent and isHedging) or isQuestion or isOutlier:
+                writer.writerow([pair[1], 'Interviewee', "Tension"])
+            else:
+                writer.writerow([pair[1], 'Interviewee', "No Tension"])
 
-                if (isNegativeEmotion and isHedging) or (isBoosting and isHedging) or (cuePresent and isHedging) or isQuestion or isOutlier:
-                    writer.writerow([corpora[k].split('/',2)[2], pair[1], 'Interviewee', "Tension"])
-                else:
-                    writer.writerow([corpora[k].split('/',2)[2], pair[1], 'Interviewee', "No Tension"])
 
 if __name__ == "__main__":
-    corpora = glob.glob("datasets/interview_transcripts/*.docx")
-    print("Analyzing...")
-    tension_analysis(corpora)
-    print("*** Analysis Completed ***")
+        print("Processing file...")
+        try:
+            processor = Process(sys.argv[3])
+            processor.process_html()
+            ques_ans = processor.extract_ques_ans()
+        except:
+            print("Your file is not in the right format. Please provide valid file.")
+            sys.exit()
+        print("Processing completed...")
+
+        print("Analyzing...")
+        tension_analysis(ques_ans)
+        print("*** Analysis Completed ***")

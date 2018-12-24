@@ -1,4 +1,4 @@
-from Analysis.packages import *
+from packages import *
 
 feature_dimension = 29
 
