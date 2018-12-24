@@ -30,8 +30,8 @@ Python 3.6.7rc1
 ```
 2. Install Git and download this repository
 ```console
-$ sudo apt install git
-$ git clone https://github.com/jumayel06/Tension-Analysis.git
+foo@bar:~$ sudo apt install git
+foo@bar:~$ git clone https://github.com/jumayel06/Tension-Analysis.git
 ```
 3. Download the following files from this link (https://drive.google.com/drive/folders/1_A_KORVFA3yjkdwDtaDyywQq3H97sfUS):
 * model.h5
