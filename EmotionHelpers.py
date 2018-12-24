@@ -57,7 +57,7 @@ def load_lexicons():
                                                     'surprise': float(splitted[9])}
 
     # NRC Hashtag Emotion Lexicon (2015)
-    with open('Lexicons/NRC-Hashtag-Emotion-Lexicon-v0.2.txt', 'r') as f:
+    with open('lexicons/NRC-Hashtag-Emotion-Lexicon-v0.2.txt', 'r') as f:
         f.readline()
         for line in f:
             splitted = line.strip().split('\t')

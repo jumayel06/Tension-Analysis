@@ -6,7 +6,7 @@ the terminal:
 
 
 ```console
-$ python main.py models/model.h5 models/variables.p datasets/interview_transcripts/BertheKayitesi.docx output.csv
+$ python3 main.py models/model.h5 models/variables.p datasets/interview_transcripts/BertheKayitesi.docx output.csv
 ```
 
 **NOTE:**
@@ -30,10 +30,10 @@ Python 3.6.7rc1
 ```
 2. Install Git and download this repository
 ```console
-foo@bar:~$ sudo apt install git
-foo@bar:~$ git clone https://github.com/jumayel06/Tension-Analysis.git
+$ sudo apt install git
+$ git clone https://github.com/jumayel06/Tension-Analysis.git
 ```
-3. Download the following files from this link (https://drive.google.com/drive/folders/1_A_KORVFA3yjkdwDtaDyywQq3H97sfUS):
+3. Download the following files from this link: https://drive.google.com/drive/folders/1_A_KORVFA3yjkdwDtaDyywQq3H97sfUS
 * model.h5
 * variables.p
 * stanford-corenlp-full-2018-02-27.zip
@@ -41,3 +41,16 @@ foo@bar:~$ git clone https://github.com/jumayel06/Tension-Analysis.git
 4. Copy the first two files (*model.h5* and *variables.p*) in a new folder called **models**.
 5. Copy the last file (*stanford-corenlp-full-2018-02-27.zip*) in the **resources** folder.
 6. Install the following packages from terminal:
+```console
+$ sudo apt install python3-pip
+$ pip3 install bs4
+$ pip3 install mammoth
+$ pip3 install nltk
+$ pip3 install psutil
+$ pip3 install vaderSentiment
+$ pip3 install numpy
+$ pip3 install keras
+$ pip3 install tensorflow
+$ pip3 install emoji
+$ pip3 install sklearn
+```
