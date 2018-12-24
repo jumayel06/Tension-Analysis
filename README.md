@@ -5,7 +5,7 @@ In order to use the tension analysis tool, run the following command on
 the terminal:
 
 
-```shell
+```console
 $ python main.py models/model.h5 models/variables.p datasets/interview_transcripts/BertheKayitesi.docx output.csv
 ```
 
@@ -24,20 +24,20 @@ The above command requires five arguments:
 Follow the steps provided below in order to get everything set up:
 
 1. Install Python
-```shell
+```console
 $ python3 --version
 Python 3.6.7rc1
 ```
 2. Install Git and download this repository
-```shell
+```console
 $ sudo apt install git
 $ git clone https://github.com/jumayel06/Tension-Analysis.git
 ```
 3. Download the following files from this link (https://drive.google.com/drive/folders/1_A_KORVFA3yjkdwDtaDyywQq3H97sfUS):
-```
-model.h5
-variables.p
-stanford-corenlp-full-2018-02-27.zip
-```
+* model.h5
+* variables.p
+* stanford-corenlp-full-2018-02-27.zip
+
 4. Copy the first two files (*model.h5* and *variables.p*) in a new folder called **models**.
-5. Copy the last file in the **resources** folder.
+5. Copy the last file (*stanford-corenlp-full-2018-02-27.zip*) in the **resources** folder.
+6. Install the following packages from terminal:
