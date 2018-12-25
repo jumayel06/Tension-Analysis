@@ -1,5 +1,7 @@
 # Getting Started
 
+*(Recommended operating systems: macOS or Linux)*
+
 Follow the steps provided below in order to get everything set up:
 
 1. Install Python
