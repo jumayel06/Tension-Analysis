@@ -72,3 +72,6 @@ a csv file similar like this:
 
 <img src="sample.png" width="500" height="250" />
 
+
+***Important:*** Provided interview transcript should be in the right
+format for this tool to work correctly.
