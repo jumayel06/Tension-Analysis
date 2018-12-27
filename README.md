@@ -75,3 +75,6 @@ a csv file similar like this:
 
 ***Important:*** Provided interview transcript should be in the right
 format for this tool to work correctly.
+
+
+**Tutorial:** https://goo.gl/cegbjB
